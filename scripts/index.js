@@ -1,5 +1,28 @@
-import function1 from "./function1.js"
-import function2 from "./function2.js"
-function1()
-const str = document.querySelector(".block-text").innerText;
-document.querySelector(".buttons:first-child").addEventListener("click", function2(str))
+const button = document.querySelector('.getButton')
+const list = document.querySelector('ul')
+
+const getDataAsyncFn = async () => {
+    const getData = async url => {
+        const response = await fetch(url)
+        const json = await response.json()
+        return json
+    }
+
+    try {
+        const data = await getData('https://jsonplaceholder.typicode.com/photos')
+        return data
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+button.addEventListener('click', async () => {
+    let users = await getDataAsyncFn()
+    users.forEach(user => {
+        console.log(user)
+        list.insertAdjacentHTML(
+            `beforeend`,
+            `<li class="listElement"><img src="${user.url}">${user.title}</li>`
+        )
+    })
+})
